@@ -26,12 +26,19 @@ db.connect((err) => {
 
 // Fetch all data
 app.get('/api/data', (req, res) => {
+  // const query = `
+  //   SELECT * 
+  //   FROM computer_software 
+  //   JOIN software 
+  //   ON computer_software.software_id = software.software_id
+  //   ORDER BY computer_software.Computer_ID ASC
+  // `;
   const query = `
-    SELECT * 
-    FROM computer_software 
-    JOIN software 
-    ON computer_software.software_id = software.software_id
-    ORDER BY computer_software.Computer_ID ASC
+    SELECT c.Computer_ID, cs.Computer_software_ID, s.Software_ID, s.Software_Name, s.Version
+    FROM computer c
+    LEFT JOIN computer_software cs ON c.Computer_ID = cs.Computer_ID
+    LEFT JOIN software s ON cs.Software_ID = s.Software_ID
+    ORDER BY c.Computer_ID ASC;
   `;
   db.query(query, (err, results) => {
     if (err) {
