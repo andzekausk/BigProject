@@ -29,12 +29,19 @@ db.connect(err => {
 
 
 app.get('/api/data', (req, res) => {
+  // const query = `
+  //   SELECT * 
+  //   FROM computer_parts 
+  //   JOIN Pc_parts 
+  //   USING (Part_ID)
+  //   ORDER by Computer_ID ASC
+  // `;
   const query = `
-    SELECT * 
-    FROM computer_parts 
-    JOIN Pc_parts 
-    USING (Part_ID)
-    ORDER by Computer_ID ASC
+    SELECT c.Computer_ID, cp.Computer_Part_ID, p.Part_ID, p.Part_type, p.Part_name, p.apraksts
+    FROM computer c
+    LEFT JOIN computer_parts cp ON c.Computer_ID = cp.Computer_ID
+    LEFT JOIN Pc_parts p ON cp.Part_ID = p.Part_ID
+    ORDER BY c.Computer_ID ASC;
   `;
 
   db.query(query, (err, results) => {
